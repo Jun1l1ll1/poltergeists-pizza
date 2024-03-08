@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-import { getFirestore, collection, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, setDoc, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,16 +17,20 @@ const firebaseConfig = {
     measurementId: "G-CZN50SKVGH"
 };
 
-// Initialize Firebase
+// Initialize and refrence Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
 const db = getFirestore(app);
-const pizzaCol = collection(db, "pizzalib");
-// console.log(pizzaCol);
 
-await setDoc(doc(pizzaCol, "cthulhusfavorite"), {
+// Get pizzas
+const pizza_lib = collection(db, "pizzalib");
+
+await setDoc(doc(pizza_lib, "cthulhusfavorite"), {
     name: "Cthulhu\'s favorite",
     ingredients: ["Lotus flower", "Squid", "Cheddar", "Parmesan", "Tomato sauce"]
 });
 
+const pizza_docs = await getDocs(pizza_lib);
+pizza_docs.forEach((doc) => {
+    console.log(doc.id, " => ", doc.data());
+});

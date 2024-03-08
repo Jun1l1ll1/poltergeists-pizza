@@ -1,11 +1,14 @@
 :root {
     --primary-color: #5f5ff5;
+    --text-color: #dbdbdb;
+    --background-color: #202020;
+    --element-color: #131313;
 }
 
 body, html {
     margin: 0px;
-    background-color: #131313;
-    color: white;
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
 button {
@@ -15,6 +18,23 @@ button {
     border: none;
     padding: 7px;
 }
+button:active {
+    opacity: 0.5;
+}
 button.primary {
     background-color: var(--primary-color);
+}
+
+a {
+    color: var(--text-color); /*eadfcb*/
+}
+
+
+
+.navbar_cont {
+    background-color: var(--element-color);
+    height: 100vh;
+    padding-left: 5px;
+    padding-right: 5px;
+    width: fit-content;
 }
