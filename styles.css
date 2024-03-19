@@ -1,6 +1,7 @@
 :root {
     --primary-color: #5f5ff5;
     --text-color: #dbdbdb;
+    --lighter-color: #383838;
     --background-color: #202020;
     --element-color: #131313;
     --radius-settings: 40px;
@@ -38,12 +39,19 @@ h1, h2, h3, h4, h5, h6, p {
 
 
 
+.left_column {
+    width: 70px;
+    position: relative;
+}
 .navbar_cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     background-color: var(--element-color);
     height: 100vh;
-    padding-left: 5px;
-    padding-right: 5px;
-    width: fit-content;
+    width: inherit;
+    position: fixed;
 }
 
 .center_elements {
@@ -54,8 +62,24 @@ h1, h2, h3, h4, h5, h6, p {
 
 
 
+#pizza_dungeon {
+    display: grid;
+    grid-template-columns: 1fr;
+    
+    @media only screen and (min-width: 1100px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    @media only screen and (min-width: 800px) and (max-width: 1100px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+
 .pizza_cont {
     height: fit-content;
+    width: fit-content;
 }
 
 .pizza_cont .pizza_img {
@@ -63,7 +87,7 @@ h1, h2, h3, h4, h5, h6, p {
     height: 250px;
     border-radius: var(--radius-settings);
     overflow: hidden;
-    background-color: var(--element-color);
+    background-color: var(--lighter-color);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -94,4 +118,14 @@ h1, h2, h3, h4, h5, h6, p {
 .pizza_cont p {
     font-weight: lighter;
     opacity: .5;
+}
+
+
+
+
+
+.no_padding_resize {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box; 
 }

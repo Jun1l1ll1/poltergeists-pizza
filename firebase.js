@@ -25,12 +25,34 @@ const db = getFirestore(app);
 // Get pizzas
 const pizza_lib = collection(db, "pizzalib");
 
-await setDoc(doc(pizza_lib, "cthulhusfavorite"), {
-    name: "Cthulhu\'s favorite",
-    ingredients: ["Lotus flower", "Squid", "Cheddar", "Parmesan", "Tomato sauce"]
-});
 
-const pizza_docs = await getDocs(pizza_lib);
+// CREATE A PIZZA
+// await setDoc(doc(pizza_lib, "satanspizza"), {
+//     name: "Satan\'s pizza",
+//     ingredients: ["Goat meat", "Olives", "Puer", "Poison ivy", "\"Special\" sauce"],
+//     price: 666
+// });
+
+
+// PRINT THE PIZZAS ON PAGE
+let dungeon_html_obj = document.getElementById("pizza_dungeon");
+const pizza_docs = await getDocs(pizza_lib); 
+dungeon_html_obj.innerHTML = "";
 pizza_docs.forEach((doc) => {
+    let ingred_txt = String(doc.data().ingredients).replaceAll(",", " • ");
+
+    dungeon_html_obj.innerHTML += `
+        <div class="pizza_cont" id="${doc.id}">
+            <div class="pizza_img">
+                <img src="assets/placeholder.webp" alt=""/>
+                <div class="pizza_settings"></div>
+            </div>
+            <div class="pizza_head_align">
+                <h2>${doc.data().name}</h2>
+                <p>${doc.data().price},-</p>
+            </div>
+            <p style="width: 300px;">${ingred_txt}</p>
+        </div>
+        `
     console.log(doc.id, " => ", doc.data());
 });
