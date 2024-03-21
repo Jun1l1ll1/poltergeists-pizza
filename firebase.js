@@ -45,7 +45,14 @@ pizza_docs.forEach((doc) => {
         <div class="pizza_cont" id="${doc.id}">
             <div class="pizza_img">
                 <img src="assets/placeholder.webp" alt=""/>
-                <div class="pizza_settings"></div>
+                <div class="settings_cont">
+                    Hei!
+                </div>
+                <div class="pizza_settings">
+                    <input type="checkbox" style="display: none;" name="settings" id="chckbx_${doc.id}" />
+                    <label for="chckbx_${doc.id}"><img src="assets/icons/settings-sliders.svg" alt="settings"/></label>
+                </div>
+                <div class="add_pizza"><div onclick="add_pizza('${doc.id}')"><img src="assets/icons/add.svg" alt="add" /></div></div>
             </div>
             <div class="pizza_head_align">
                 <h2>${doc.data().name}</h2>
@@ -54,5 +61,5 @@ pizza_docs.forEach((doc) => {
             <p style="width: 300px;">${ingred_txt}</p>
         </div>
         `
-    console.log(doc.id, " => ", doc.data());
+    //TODO make the add_pizza(id) function somewhere
 });

@@ -1,5 +1,6 @@
 :root {
     --primary-color: #5f5ff5;
+    --confirm-color: #00c774;
     --text-color: #dbdbdb;
     --lighter-color: #383838;
     --background-color: #202020;
@@ -98,16 +99,73 @@ h1, h2, h3, h4, h5, h6, p {
     min-height: 100%;
     object-fit: cover;
 }
-.pizza_cont .pizza_img .pizza_settings {
-    border-radius: var(--radius-settings);
+
+
+.pizza_settings {
+    position: absolute;
     width: 60px;
     height: 60px;
-    background-color: var(--primary-color);
-
-    position: absolute;
     right: 15px;
     bottom: 15px;
+
+    z-index: 5;
+    border-radius: var(--radius-settings);
+    background-color: var(--primary-color);
+    transition: .5s;
 }
+.pizza_settings:has(input:checked) {
+    background-color: var(--background-color);
+}
+
+.add_pizza {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    right: 15px;
+    bottom: 15px;
+    
+    border-radius: var(--radius-settings);
+    background-color: var(--confirm-color);
+    transition: .25s;
+    transition-delay: .25s;
+
+    display: flex;
+    align-items: center;
+
+    div {
+        height: 100%;
+        aspect-ratio: 1/1;
+        border-radius: var(--radius-settings);
+    }
+}
+.pizza_settings:has(input:checked) + .add_pizza {
+    width: 110px;
+}
+.pizza_settings:hover + .add_pizza, .add_pizza:hover {
+    width: 110px;
+}
+
+
+.settings_cont {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    right: 15px;
+    bottom: 15px;
+
+    border-radius: var(--radius-settings);
+    padding: 15px;
+    box-sizing: border-box;
+
+    background-color: #0000009d;
+    backdrop-filter: blur(10px);
+    transition: .25s;
+}
+.settings_cont:has(+ .pizza_settings input:checked) {
+    width: calc(100% - 15px*2);
+    height: calc(100% - 15px*2);
+}
+
 
 .pizza_head_align {
     display: flex;
