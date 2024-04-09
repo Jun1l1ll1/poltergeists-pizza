@@ -105,6 +105,6 @@ export async function print_pizzas() {
 
 
 
-export function add_to_cart() {
+export function add_to_db_cart() {
     alert("djiaohwidohwailfgkua");
 }

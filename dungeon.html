@@ -55,13 +55,15 @@
 <script src="./js/global.js"></script>
 <script>
     function add_pizza(item_id) {
-        module.add_to_cart();
+        //TODO: get all settings from the pizza and make an item
+        // add_to_cart(item);
+        module.add_to_db_cart();
     }
     
     const module = {};
 </script>
 <script type="module">
-    import { print_pizzas, add_to_cart } from "./js/firebase.js";
+    import { print_pizzas, add_to_db_cart } from "./js/firebase.js";
     module.add_to_cart = add_to_cart; //add function to module variable (for use in script)
     print_pizzas(); 
 </script>
