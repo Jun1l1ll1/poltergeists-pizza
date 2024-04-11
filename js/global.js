@@ -16,6 +16,9 @@ function get_cart_from_cookie() {
 }
 
 
+function goTo_home() {
+    document.location.href = "./";
+}
 
 function goTo_dungeon() {
     document.location.href = "./dungeon.html";
@@ -26,10 +29,33 @@ function goTo_contract() {
 }
 
 
+function swapTo_login() {
+    document.getElementById("login_confirm_password").style.display = "none";
+
+    document.getElementById("login_btn").style.display = "block";
+    document.getElementById("create_auth_btn").style.display = "none";
+    
+    document.getElementById("swap_login_btn").style.display = "none";
+    document.getElementById("swap_create_btn").style.display = "block";
+}
+
+function swapTo_create() {
+    document.getElementById("login_confirm_password").style.display = "block";
+
+    document.getElementById("login_btn").style.display = "none";
+    document.getElementById("create_auth_btn").style.display = "block";
+
+    document.getElementById("swap_login_btn").style.display = "block";
+    document.getElementById("swap_create_btn").style.display = "none";
+}
+
+
 function update_cart_visuals() {
     let amount_txt = document.getElementById("cart_nr_span");
     amount_txt.innerText = shopping_cart.length;
 }
+
+
 
 
 function get_cookie(name) {

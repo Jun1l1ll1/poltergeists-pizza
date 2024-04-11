@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="display: flex;">
+
+        <div class="left_column">
+            <div class="navbar_cont">
+                <div class="top">
+                    <a>Icon</a>
+                </div>
+                <div class="bottom"><!-- can place elements here if needed --></div>
+            </div>
+        </div>
+
+        <div class="center_elements full_center">
+
+            <div class="login_cont">
+                <input type="email" placeholder="ingen@nokesteds.com" name="login_email" id="login_email">
+                <input type="password" placeholder="password" name="login_password" id="login_password">
+                <input type="password" placeholder="confirm password" name="login_confirm_password" id="login_confirm_password">
+                    
+                <button id="login_btn" class="confirm_login_btn">Login</button>
+                <button id="create_auth_btn" class="confirm_login_btn">Create account</button>
+
+                <button id="swap_login_btn" onclick="swapTo_login()" class="swap_methode_btn">Alredy have an account? Login!</button>
+                <button id="swap_create_btn" onclick="swapTo_create()" class="swap_methode_btn">Create an account</button>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+<script src="./js/global.js"></script>
+<script type="module" src="./js/firebase.js"></script>
+<script type="module">
+    import { create_email_password, login_email_password } from "./js/firebase.js";
+
+    document.getElementById("create_auth_btn").addEventListener("click", create_email_password);
+    document.getElementById("login_btn").addEventListener("click", login_email_password);
+</script>
+</html>

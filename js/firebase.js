@@ -39,20 +39,44 @@ const auth = getAuth(app);
 export const create_email_password = async () => {
     const email = document.getElementById("login_email").value;
     const password = document.getElementById("login_password").value;
-    console.log(email);
 
     const user_credential = await createUserWithEmailAndPassword(auth, email, password);
-    console.log(user_credential.user);
+    alert("Successfully created user. You are now logged in!");
+
+    try {
+        if (window.location.href.split("#")[1] == "dungeon") {
+            goTo_dungeon();
+        } else if (window.location.href.split("#")[1] == "contract") {
+            goTo_contract();
+        } else {
+            goTo_home();
+        }
+    } catch (err) {
+        goTo_home();
+    }
+    //TODO save credentials in cookie
 }
 
 // Login
 export const login_email_password = async () => {
     const email = document.getElementById("login_email").value;
     const password = document.getElementById("login_password").value;
-    console.log(email);
 
     const user_credential = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user_credential.user);
+    alert("Successfully logged in!");
+    
+    try {
+        if (window.location.href.split("#")[1] == "dungeon") {
+            goTo_dungeon();
+        } else if (window.location.href.split("#")[1] == "contract") {
+            goTo_contract();
+        } else {
+            goTo_home();
+        }
+    } catch (err) {
+        goTo_home();
+    }
+    //TODO save credentials in cookie
 }
 
 

@@ -11,20 +11,7 @@
     <img src="./assets/placeholder.webp" alt="placeholder" style="height: 80%; width: 100%;">
     <button onclick="goTo_dungeon()" class="primary" style="margin-top: -17px;">Placeholder</button>
 
-    <div style="position: absolute; top: 0px;">
-        <button id="login_btn" style="color: black;">Login!!</button>
-        <button id="create_auth_btn" style="color: black;">Create?</button>
-        <input type="email" name="login_email" id="login_email">
-        <input type="password" name="login_password" id="login_password">
-    </div>
-
 </body>
 <script src="./js/global.js"></script>
 <script type="module" src="./js/firebase.js"></script>
-<script type="module">
-    import { create_email_password, login_email_password } from "./js/firebase.js";
-
-    document.getElementById("create_auth_btn").addEventListener("click", create_email_password);
-    document.getElementById("login_btn").addEventListener("click", login_email_password);
-</script>
 </html>
