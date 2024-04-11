@@ -28,6 +28,20 @@
             <div id="pizza_dungeon">
 
                 <div class="pizza_cont" style="color: var(--lighter-color)">
+                    <!-- <div>
+                        <div>
+                            <input type="radio" name="pizza_size" id="id_L" value="L">
+                            <input type="radio" name="pizza_size" id="id_M" value="M" checked>
+                            <input type="radio" name="pizza_size" id="id_S" value="S">
+                        </div>
+                        <div>
+                            <input type="checkbox" name="pizza_gluten" id="id_gluten_free">
+                        </div>
+                        <div>
+                            <input type="checkbox" name="ing_cheese" id="id_ing_cheese">
+                        </div>
+                    </div> -->
+
                     <div class="pizza_img"></div>
                     <div class="pizza_head_align"> <h2>___________</h2> <p>____</p> </div>
                     <p style="width: 300px;">___________________________</p>
@@ -54,17 +68,33 @@
 <script type="module" src="./js/firebase.js"></script>
 <script src="./js/global.js"></script>
 <script>
+    get_cart_from_cookie()
+    update_cart_visuals()
+
     function add_pizza(item_id) {
-        //TODO: get all settings from the pizza and make an item
-        // add_to_cart(item);
-        module.add_to_db_cart();
+        let removed_ings = [];
+        for (let ing of document.getElementsByClassName(item_id+"_ing_inp")) {
+            if (!ing.checked) {
+                removed_ings.push(ing.value);
+            }
+        }
+
+        let item = {
+            id: item_id,
+            size: document.querySelector("input[name="+item_id+"_size]:checked").value,
+            gluten_free: document.getElementById(item_id+"_gluten_free").checked,
+            removed: removed_ings
+        };
+
+        add_to_cart(item);
+        module.add_to_db_cart(); //TODO add item here too?
     }
     
     const module = {};
 </script>
 <script type="module">
     import { print_pizzas, add_to_db_cart } from "./js/firebase.js";
-    module.add_to_cart = add_to_cart; //add function to module variable (for use in script)
+    module.add_to_db_cart = add_to_db_cart; //add function to module variable (for use in script)
     print_pizzas(); 
 </script>
 </html>

@@ -77,15 +77,34 @@ export async function print_pizzas() {
     const pizza_docs = await getDocs(pizza_lib); 
     dungeon_html_obj.innerHTML = "";
     pizza_docs.forEach((doc) => {
-        let ingred_txt = String(doc.data().ingredients).replaceAll(",", " • ");
+        let ing_txt = String(doc.data().ingredients).replaceAll(",", " • ");
 
         dungeon_html_obj.innerHTML += `
             <div class="pizza_cont" id="${doc.id}">
                 <div class="pizza_img">
                     <img src="assets/placeholder.webp" alt=""/>
+
                     <div class="settings_cont">
-                        Hei!
+                        <div>
+                            <h5 class="settings_title">Size</h5>
+                            <input type="radio" name="${doc.id}_size" id="${doc.id}_L" value="L">
+                            <label for="${doc.id}_L">L</label>
+                            <input type="radio" name="${doc.id}_size" id="${doc.id}_M" value="M" checked>
+                            <label for="${doc.id}_M">M</label>
+                            <input type="radio" name="${doc.id}_size" id="${doc.id}_S" value="S">
+                            <label for="${doc.id}_S">S</label>
+                        </div>
+                        <div>
+                            <h5 class="settings_title">Toppings</h5>
+                            <div class="ingredients_grid" id="${doc.id}_ing"></div>
+                        </div>
+                        <div>
+                            <h5 class="settings_title">Options</h5>
+                            <input type="checkbox" name="${doc.id}_gluten" id="${doc.id}_gluten_free">
+                            <label for="${doc.id}_gluten_free">Gluten free</label>
+                        </div>
                     </div>
+
                     <div class="pizza_settings">
                         <input type="checkbox" style="display: none;" name="settings" id="chckbx_${doc.id}" />
                         <label for="chckbx_${doc.id}"><img src="assets/icons/settings-sliders.svg" alt="settings"/></label>
@@ -96,10 +115,18 @@ export async function print_pizzas() {
                     <h2>${doc.data().name}</h2>
                     <p>${doc.data().price},-</p>
                 </div>
-                <p style="width: 300px;">${ingred_txt}</p>
+                <p style="width: 300px;">${ing_txt}</p>
             </div>
-            `
-        //TODO make the add_pizza(id) function somewhere
+        `;
+
+        for (let ing of doc.data().ingredients) {
+            document.getElementById(doc.id+"_ing").innerHTML += `
+                <div>
+                    <input type="checkbox" class="${doc.id}_ing_inp" name="${doc.id}_ing_${ing}" id="${doc.id}_ing_${ing}" value="${ing}" checked>
+                    <label for="${doc.id}_ing_${ing}">${ing}</label>
+                </div>
+            `;
+        }
     });
 }
 

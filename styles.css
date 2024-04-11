@@ -1,6 +1,6 @@
 :root {
     --primary-color: #5f5ff5;
-    --confirm-color: #00c774;
+    --confirm-color: #57d6a1;
     --text-color: #dbdbdb;
     --lighter-color: #383838;
     --background-color: #202020;
@@ -169,6 +169,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 
+
 .settings_cont {
     position: absolute;
     width: 60px;
@@ -183,11 +184,28 @@ h1, h2, h3, h4, h5, h6, p {
     background-color: #0000009d;
     backdrop-filter: blur(10px);
     transition: .25s;
+
+    div {
+        visibility: hidden;
+    }
 }
 .settings_cont:has(+ .pizza_settings input:checked) {
     width: calc(100% - 15px*2);
     height: calc(100% - 15px*2);
+
+    div {
+        visibility: visible;
+    }
 }
+
+.settings_title {
+    margin-top: 10px;
+}
+.ingredients_grid {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
 
 
 .pizza_head_align {
@@ -196,7 +214,7 @@ h1, h2, h3, h4, h5, h6, p {
     justify-content: space-between;
 }
 
-.pizza_cont p {
+.pizza_cont>p {
     font-weight: lighter;
     opacity: .5;
 }
