@@ -4,7 +4,10 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase
 import { 
     getAuth, 
     signInWithEmailAndPassword,
-    createUserWithEmailAndPassword
+    createUserWithEmailAndPassword,
+    setPersistence,
+    browserSessionPersistence,
+    onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 import { getFirestore, collection, setDoc, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -54,17 +57,32 @@ export const create_email_password = async () => {
     } catch (err) {
         goTo_home();
     }
-    //TODO save credentials in cookie
 }
 
 // Login
 export const login_email_password = async () => {
     const email = document.getElementById("login_email").value;
     const password = document.getElementById("login_password").value;
-
-    const user_credential = await signInWithEmailAndPassword(auth, email, password);
-    alert("Successfully logged in!");
     
+    // const user_credential = await signInWithEmailAndPassword(auth, email, password);
+    const user_credential = await setPersistence(auth, browserSessionPersistence)
+        .then(() => {
+            // Existing and future Auth states are now persisted in the current
+            // session only. Closing the window would clear any existing state even
+            // if a user forgets to sign out.
+            // ...
+            // New sign-in will be persisted with session persistence.
+            return signInWithEmailAndPassword(auth, email, password);
+        })
+        .catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+        });
+
+    console.log(get_user());
+    alert("Successfully logged in!");
+
     try {
         if (window.location.href.split("#")[1] == "dungeon") {
             goTo_dungeon();
@@ -76,10 +94,33 @@ export const login_email_password = async () => {
     } catch (err) {
         goTo_home();
     }
-    //TODO save credentials in cookie
+    // document.cookie = "user="+JSON.stringify(user_credential); 
 }
 
 
+export function get_user() { //TODO FIKS PLZ
+    let email;
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/auth.user
+            const uid = user.uid;
+            email = user.email;
+            console.log(email)
+            // ...
+        } else {
+            // User is signed out
+            // ...
+            
+        }
+    });
+    return email;
+    // if (user) {
+    //     return user.email;
+    // }
+
+    // return false;
+}
 
 
 

@@ -5,11 +5,15 @@ function add_to_cart(item) {
     shopping_cart.push(item);
     update_cart_visuals();
     document.cookie = "cart="+JSON.stringify(shopping_cart); // Deleted when browser closed
+    
+    
 }
 
 function get_cart_from_cookie() {
     try {
-        shopping_cart = JSON.parse(get_cookie("cart"));
+        if (get_cookie("cart")) {
+            shopping_cart = JSON.parse(get_cookie("cart"));
+        }
     } catch (err) {
         shopping_cart = [];
     }
@@ -52,7 +56,9 @@ function swapTo_create() {
 
 function update_cart_visuals() {
     let amount_txt = document.getElementById("cart_nr_span");
-    amount_txt.innerText = shopping_cart.length;
+    if (shopping_cart) {
+        amount_txt.innerText = shopping_cart.length;
+    }
 }
 
 
