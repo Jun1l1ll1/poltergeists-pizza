@@ -7,9 +7,19 @@ import {
     createUserWithEmailAndPassword,
     setPersistence,
     browserSessionPersistence,
-    onAuthStateChanged
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getFirestore, collection, setDoc, getDocs, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { 
+    getFirestore, 
+    collection, 
+    setDoc, 
+    getDocs, 
+    getDoc,
+    updateDoc,
+    doc,
+    arrayUnion
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -44,7 +54,15 @@ export const create_email_password = async () => {
     const password = document.getElementById("login_password").value;
 
     const user_credential = await createUserWithEmailAndPassword(auth, email, password);
-    alert("Successfully created user. You are now logged in!");
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            create_user_doc(user.uid);
+        } else {
+            console.error("User not logged in...")
+        }
+    });
+
+    // alert("Successfully created user. You are now logged in!");
 
     try {
         if (window.location.href.split("#")[1] == "dungeon") {
@@ -64,24 +82,16 @@ export const login_email_password = async () => {
     const email = document.getElementById("login_email").value;
     const password = document.getElementById("login_password").value;
     
-    // const user_credential = await signInWithEmailAndPassword(auth, email, password);
-    const user_credential = await setPersistence(auth, browserSessionPersistence)
-        .then(() => {
-            // Existing and future Auth states are now persisted in the current
-            // session only. Closing the window would clear any existing state even
-            // if a user forgets to sign out.
-            // ...
-            // New sign-in will be persisted with session persistence.
-            return signInWithEmailAndPassword(auth, email, password);
-        })
-        .catch((error) => {
-            // Handle Errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-        });
+    const user_credential = await signInWithEmailAndPassword(auth, email, password);
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            update_cart_from_db(user.uid);
+        } else {
+            console.error("User not logged in...")
+        }
+    });
 
-    console.log(get_user());
-    alert("Successfully logged in!");
+    // alert("Successfully logged in!");
 
     try {
         if (window.location.href.split("#")[1] == "dungeon") {
@@ -94,32 +104,55 @@ export const login_email_password = async () => {
     } catch (err) {
         goTo_home();
     }
-    // document.cookie = "user="+JSON.stringify(user_credential); 
+}
+
+export function logout() {
+    signOut(auth).then(() => {
+        document.getElementById("login_link").style.display = "block";
+        document.getElementById("logout_btn").style.display = "none";
+    }).catch((err) => {
+        console.error(err)
+    });
 }
 
 
-export function get_user() { //TODO FIKS PLZ
-    let email;
+export async function isSignedIn_dungeon() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/auth.user
-            const uid = user.uid;
-            email = user.email;
-            console.log(email)
-            // ...
+            document.getElementById("login_link").style.display = "none";
+            document.getElementById("logout_btn").style.display = "block";
+            if (shopping_cart.length <= 0) {
+                update_cart_from_db(user.uid);
+            }
         } else {
-            // User is signed out
-            // ...
-            
+            console.log("User is not signed in")
         }
     });
-    return email;
-    // if (user) {
-    //     return user.email;
-    // }
+}
 
-    // return false;
+async function update_cart_from_db(UID) {
+    const user_col = collection(db, "users");
+    const user_doc = await getDoc(doc(user_col, UID));
+    const db_cart = user_doc.data().cart;
+    console.log(db_cart);
+
+    if (db_cart.length > 0) {
+        shopping_cart = [];
+        for (let item of db_cart) {
+            shopping_cart.push(JSON.parse(item));
+        }
+        update_cart_visuals();
+        document.cookie = "cart="+JSON.stringify(shopping_cart);
+    }
+    console.log(shopping_cart);
+}
+
+async function create_user_doc(UID) {
+    const user_col = collection(db, "users");
+    await setDoc(doc(user_col, UID), {
+        cart: []
+    });
+    console.log(UID);
 }
 
 
@@ -197,6 +230,17 @@ export async function print_pizzas() {
 
 
 
-export function add_to_db_cart() {
-    alert("djiaohwidohwailfgkua");
+export function add_to_db_cart(item) {
+    // JSON.stringify
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const user_col = collection(db, "users");
+            // const user_doc = await getDoc(doc(user_col, user.uid));
+            await updateDoc(doc(user_col, user.uid), {
+                cart: arrayUnion(JSON.stringify(item))
+            });
+        } else {
+            console.log("User is not signed in")
+        }
+    });
 }

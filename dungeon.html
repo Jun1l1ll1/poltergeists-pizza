@@ -16,6 +16,7 @@
                 </div>
                 <div class="bottom">
                     <a id="login_link" href="soulbind.html#dungeon">Login</a>
+                    <button id="logout_btn" onclick="module.logout()">Log out</button>
                     <button onclick="goTo_contract()" class="shopping_cart_btn">
                         <img src="assets/icons/cart.svg" alt="Shopping cart">
                         <span id="cart_nr_span">0</span>
@@ -88,19 +89,17 @@
         };
 
         add_to_cart(item);
-        module.add_to_db_cart(); //TODO add item here too?
+        module.add_to_db_cart(item); //TODO add item here too?
     }
     
     const module = {};
 </script>
 <script type="module">
-    import { print_pizzas, add_to_db_cart, get_user } from "./js/firebase.js";
+    import { print_pizzas, add_to_db_cart, isSignedIn_dungeon, logout } from "./js/firebase.js";
     module.add_to_db_cart = add_to_db_cart; //adding function to module variable (for use in script)
-    
-    console.log(get_user());
-    if (get_user()) {
-        // document.getElementById("login_link").style.display = "none";
-    }
-    print_pizzas(); 
+    module.logout = logout;
+
+    print_pizzas();
+    isSignedIn_dungeon(); 
 </script>
 </html>

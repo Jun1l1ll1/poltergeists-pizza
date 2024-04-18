@@ -103,6 +103,10 @@ input:not([type=checkbox], [type=radio]) {
 }
 
 
+#logout_btn {
+    display: none;
+}
+
 
 .no_padding_resize {
     -webkit-box-sizing: border-box;
