@@ -116,7 +116,7 @@ export function logout() {
 }
 
 
-export async function isSignedIn_dungeon() {
+export async function is_signed_in() {
     onAuthStateChanged(auth, (user) => {
         if (user) {
             document.getElementById("login_link").style.display = "none";

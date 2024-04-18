@@ -4,8 +4,62 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    
+    <div style="display: flex;">
+
+        <div class="left_column">
+            <div class="navbar_cont">
+                <div class="top">
+                    <a>Icon</a>
+                </div>
+                <div class="bottom">
+                    <a id="login_link" href="soulbind.html#dungeon">Login</a>
+                    <button id="logout_btn" onclick="module.logout()">Log out</button>
+                    <button onclick="goTo_contract()" class="shopping_cart_btn">
+                        <img src="assets/icons/cart.svg" alt="Shopping cart">
+                        <span id="cart_nr_span">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="center_split">
+            <div class="center_left">
+                <div class="cart_cont">
+                    <h3>Total of x pizzas and y extras</h3>
+                    <div id="receipt_cont">
+                        <div id="receipt_test">
+                            <div>
+                                <h4>Pizza</h4>
+                                <p>Size</p>
+                                <p>Extra stuff</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="center_right">
+
+
+            </div>
+        </div>
+
+    </div>
 </body>
+<script type="module" src="./js/firebase.js"></script>
+<script src="./js/global.js"></script>
+<script>
+    get_cart_from_cookie()
+    update_cart_visuals()
+    
+    const module = {};
+</script>
+<script type="module">
+    import { print_pizzas, add_to_db_cart, is_signed_in, logout } from "./js/firebase.js";
+    module.add_to_db_cart = add_to_db_cart;
+
+    is_signed_in(); 
+</script>
 </html>

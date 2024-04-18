@@ -95,11 +95,11 @@
     const module = {};
 </script>
 <script type="module">
-    import { print_pizzas, add_to_db_cart, isSignedIn_dungeon, logout } from "./js/firebase.js";
+    import { print_pizzas, add_to_db_cart, is_signed_in, logout } from "./js/firebase.js";
     module.add_to_db_cart = add_to_db_cart; //adding function to module variable (for use in script)
     module.logout = logout;
 
     print_pizzas();
-    isSignedIn_dungeon(); 
+    is_signed_in(); 
 </script>
 </html>

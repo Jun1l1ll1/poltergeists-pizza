@@ -279,3 +279,26 @@ input:not([type=checkbox], [type=radio]) {
 }
 
 /* END SOULBIND */
+/** START CONTRACT */
+
+.center_split {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .center_left {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .center_right {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+/* END CONTRACT */
