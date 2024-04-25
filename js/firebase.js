@@ -244,3 +244,73 @@ export function add_to_db_cart(item) {
         }
     });
 }
+
+
+
+
+export async function show_receipt() {
+    let receipt_cont = document.getElementById("receipt_cont");
+    receipt_cont.innerHTML = "";
+
+    // Merging multiple pizzas
+    let loop_cart = [];
+    let exists = false;
+    for (let item of shopping_cart) {
+        exists = false;
+        try {
+            for (let existing_item of loop_cart) {
+                if (JSON.stringify(item) == JSON.stringify(existing_item[1])) {
+                    existing_item[0] ++;
+                    exists = true;
+                    break;
+                }
+            }
+        } catch (error) {
+            console.warn(error)
+        }
+        if (!exists) {
+            loop_cart.push([1, item])
+        }
+    }
+
+    // Showing on page
+    for (let item of loop_cart) {
+        console.log(item)
+        const db_pizza = await getDoc(doc(pizza_lib, item[1].id));
+        receipt_cont.innerHTML += `
+            <div class="receipt_pizza" id="receipt_${item[1].id}_${item[1].removed}_${item[1].gluten_free}">
+                <div>
+                    <h3>${db_pizza.data().name}</h3>
+                    <h3>${item[0]}</h3>
+                </div>
+                <div>
+                    <p>${item[1].size}</p>
+                    <p>${db_pizza.data().price},-</p>
+                </div>
+            </div>
+            <hr class="receipt_pizza_hr"/>
+        `;
+        const this_cont = document.getElementById(`receipt_${item[1].id}_${item[1].removed}_${item[1].gluten_free}`);
+
+        if (item[1].gluten_free) {
+            if (item[1].id == "margherita") {
+                this_cont.innerHTML += `
+                    <p>Gluten free</p>
+                `;
+            } else {
+                this_cont.innerHTML += `
+                    <div>
+                        <p>Gluten free</p>
+                        <p>+75,-</p>
+                    </div>
+                `;
+            }
+        }
+
+        for (let option of item[1].removed) {
+            this_cont.innerHTML += `
+                <p>No ${option}</p>
+            `;
+        }
+    }
+}

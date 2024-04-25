@@ -26,16 +26,24 @@
 
         <div class="center_split">
             <div class="center_left">
+                <h2>Total of x pizzas and y extras</h2>
                 <div class="cart_cont">
-                    <h3>Total of x pizzas and y extras</h3>
                     <div id="receipt_cont">
-                        <div id="receipt_test">
+                        <div class="receipt_pizza" id="receipt_test">
                             <div>
-                                <h4>Pizza</h4>
+                                <h3>Pizza</h3>
+                                <h3>1</h3>
+                            </div>
+                            <div>
                                 <p>Size</p>
+                                <p>125,-</p>
+                            </div>
+                            <div>
                                 <p>Extra stuff</p>
+                                <p>+?,-</p>
                             </div>
                         </div>
+                        <hr class="receipt_pizza_hr"/>
                     </div>
                 </div>
 
@@ -57,9 +65,10 @@
     const module = {};
 </script>
 <script type="module">
-    import { print_pizzas, add_to_db_cart, is_signed_in, logout } from "./js/firebase.js";
+    import { print_pizzas, add_to_db_cart, is_signed_in, logout, show_receipt } from "./js/firebase.js";
     module.add_to_db_cart = add_to_db_cart;
 
     is_signed_in(); 
+    show_receipt();
 </script>
 </html>

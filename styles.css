@@ -301,4 +301,21 @@ input:not([type=checkbox], [type=radio]) {
     }
 }
 
+.cart_cont {
+    width: 60%;
+    margin-top: 50px;
+}
+
+
+.receipt_pizza {
+    >div {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.receipt_pizza_hr {
+    opacity: .25;
+}
+
 /* END CONTRACT */
