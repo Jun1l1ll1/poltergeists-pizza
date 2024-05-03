@@ -108,8 +108,11 @@ export const login_email_password = async () => {
 
 export function logout() {
     signOut(auth).then(() => {
+        document.cookie = "cart=[]";
+        shopping_cart = [];
         document.getElementById("login_link").style.display = "block";
         document.getElementById("logout_btn").style.display = "none";
+        update_cart_visuals();
     }).catch((err) => {
         console.error(err)
     });
@@ -133,9 +136,14 @@ export async function is_signed_in() {
 async function update_cart_from_db(UID) {
     const user_col = collection(db, "users");
     const user_doc = await getDoc(doc(user_col, UID));
-    const db_cart = user_doc.data().cart;
+    let db_cart;
+    try {
+        db_cart = user_doc.data().cart;
+    } catch (err) {
+        create_user_doc(UID);
+        db_cart = user_doc.data().cart;
+    }
     console.log(db_cart);
-
     if (db_cart.length > 0) {
         shopping_cart = [];
         for (let item of db_cart) {
@@ -144,7 +152,6 @@ async function update_cart_from_db(UID) {
         update_cart_visuals();
         document.cookie = "cart="+JSON.stringify(shopping_cart);
     }
-    console.log(shopping_cart);
 }
 
 async function create_user_doc(UID) {
@@ -235,9 +242,10 @@ export function add_to_db_cart(item) {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
             const user_col = collection(db, "users");
-            // const user_doc = await getDoc(doc(user_col, user.uid));
+            const user_doc = await getDoc(doc(user_col, user.uid));
+            const user_cart = user_doc.data().cart;
             await updateDoc(doc(user_col, user.uid), {
-                cart: arrayUnion(JSON.stringify(item))
+                cart: [...user_cart, JSON.stringify(item)]
             });
         } else {
             console.log("User is not signed in")
@@ -245,6 +253,38 @@ export function add_to_db_cart(item) {
     });
 }
 
+
+export function cart_remove(id, size, removed, gluten_free) {
+    const item = {
+        id: id,
+        size: size,
+        gluten_free: gluten_free == "true",
+        removed: [...removed]
+    }
+    
+    try {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                //// update_cart_from_db(user.uid); //Make sure its up to date
+                const index = shopping_cart.map((e) => JSON.stringify(e)).indexOf(JSON.stringify(item));
+                shopping_cart.slice(index, 1); // Remove from shoppingcart
+                
+                // Remove from db cart
+                const user_col = collection(db, "users");
+                await updateDoc(doc(user_col, user.uid), {
+                    cart: [...shopping_cart]
+                });
+
+            } else {
+                shopping_cart.slice(shopping_cart.indexOf(item), 1); // Remove from shoppingcart
+                document.cookie = "cart="+JSON.stringify(shopping_cart);
+            }
+        });
+    } catch (err) {
+        console.warn(err);
+    }
+    show_receipt();
+}
 
 
 
@@ -275,10 +315,10 @@ export async function show_receipt() {
 
     // Showing on page
     for (let item of loop_cart) {
-        console.log(item)
         const db_pizza = await getDoc(doc(pizza_lib, item[1].id));
         receipt_cont.innerHTML += `
-            <div class="receipt_pizza" id="receipt_${item[1].id}_${item[1].removed}_${item[1].gluten_free}">
+            <div class="receipt_pizza" id="receipt_${item[1].id}_${item[1].size}_${item[1].removed}_${item[1].gluten_free}">
+                <button class="remove_pizza" onclick="module.cart_remove('${item[1].id}','${item[1].size}','${item[1].removed}','${item[1].gluten_free}')">Remove 1</button>
                 <div>
                     <h3>${db_pizza.data().name}</h3>
                     <h3>${item[0]}</h3>
@@ -290,7 +330,7 @@ export async function show_receipt() {
             </div>
             <hr class="receipt_pizza_hr"/>
         `;
-        const this_cont = document.getElementById(`receipt_${item[1].id}_${item[1].removed}_${item[1].gluten_free}`);
+        const this_cont = document.getElementById(`receipt_${item[1].id}_${item[1].size}_${item[1].removed}_${item[1].gluten_free}`);
 
         if (item[1].gluten_free) {
             if (item[1].id == "margherita") {

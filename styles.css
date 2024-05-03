@@ -308,10 +308,22 @@ input:not([type=checkbox], [type=radio]) {
 
 
 .receipt_pizza {
+    position: relative;
     >div {
         display: flex;
         justify-content: space-between;
     }
+    >.remove_pizza {
+        position: absolute;
+        background-color: red;
+        padding: 2px;
+        margin: 0px;
+
+        display: none;
+    }
+}
+.receipt_pizza:has(.remove_pizza):hover>.remove_pizza {
+    display: block;
 }
 
 .receipt_pizza_hr {

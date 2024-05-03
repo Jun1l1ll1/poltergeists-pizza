@@ -65,8 +65,10 @@
     const module = {};
 </script>
 <script type="module">
-    import { print_pizzas, add_to_db_cart, is_signed_in, logout, show_receipt } from "./js/firebase.js";
+    import { print_pizzas, add_to_db_cart, is_signed_in, logout, show_receipt, cart_remove } from "./js/firebase.js";
     module.add_to_db_cart = add_to_db_cart;
+    module.logout = logout;
+    module.cart_remove = cart_remove;
 
     is_signed_in(); 
     show_receipt();
