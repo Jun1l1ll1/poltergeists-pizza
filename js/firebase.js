@@ -147,7 +147,14 @@ async function update_cart_from_db(UID) {
     if (db_cart.length > 0) {
         shopping_cart = [];
         for (let item of db_cart) {
-            shopping_cart.push(JSON.parse(item));
+            console.log(item)
+            let parsed_item;
+            try {
+                parsed_item = JSON.parse(item);
+            } catch (err) {
+                parsed_item = item;
+            }
+            shopping_cart.push(parsed_item);
         }
         update_cart_visuals();
         document.cookie = "cart="+JSON.stringify(shopping_cart);
@@ -245,7 +252,7 @@ export function add_to_db_cart(item) {
             const user_doc = await getDoc(doc(user_col, user.uid));
             const user_cart = user_doc.data().cart;
             await updateDoc(doc(user_col, user.uid), {
-                cart: [...user_cart, JSON.stringify(item)]
+                cart: [...user_cart, item]
             });
         } else {
             console.log("User is not signed in")
@@ -299,7 +306,7 @@ export async function show_receipt() {
         exists = false;
         try {
             for (let existing_item of loop_cart) {
-                if (JSON.stringify(item) == JSON.stringify(existing_item[1])) {
+                if (isPizzasEqual(item, existing_item[1])) {
                     existing_item[0] ++;
                     exists = true;
                     break;
@@ -353,4 +360,26 @@ export async function show_receipt() {
             `;
         }
     }
+}
+
+
+function isPizzasEqual(pizza1, pizza2) {
+    if (pizza1.id != pizza2.id) {
+        return false;
+    }
+    if (pizza1.size != pizza2.size) {
+        return false;
+    }
+    if (pizza1.gluten_free != pizza2.gluten_free) {
+        return false;
+    }
+    
+    if (pizza1.removed.length == 0 && pizza2.removed.length == 0) {
+        return true;
+    }
+    else if (!(pizza1.removed.length == pizza2.removed.length && pizza1.removed.every((val, i) => val == pizza2.removed[i]))) {
+        return false;
+    }
+
+    return true;
 }
