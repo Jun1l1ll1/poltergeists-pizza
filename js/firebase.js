@@ -273,8 +273,16 @@ export function cart_remove(id, size, removed, gluten_free) {
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 //// update_cart_from_db(user.uid); //Make sure its up to date
-                const index = shopping_cart.map((e) => JSON.stringify(e)).indexOf(JSON.stringify(item));
-                shopping_cart.slice(index, 1); // Remove from shoppingcart
+                let index = -1;
+                for (let i=0; i < shopping_cart.length; i++) {
+                    // console.log(shopping_cart[i])
+                    if (isPizzasEqual(shopping_cart[i], item)) {
+                        index = i;
+                        break;
+                    }
+                }
+                shopping_cart.splice(index, 1); // Remove from shoppingcart
+                console.log(index, shopping_cart)
                 
                 // Remove from db cart
                 const user_col = collection(db, "users");
@@ -283,7 +291,7 @@ export function cart_remove(id, size, removed, gluten_free) {
                 });
 
             } else {
-                shopping_cart.slice(shopping_cart.indexOf(item), 1); // Remove from shoppingcart
+                shopping_cart.splice(shopping_cart.indexOf(item), 1); // Remove from shoppingcart
                 document.cookie = "cart="+JSON.stringify(shopping_cart);
             }
         });
