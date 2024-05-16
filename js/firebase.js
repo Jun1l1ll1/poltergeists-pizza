@@ -20,6 +20,7 @@ import {
     doc,
     arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,6 +42,8 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 
 const db = getFirestore(app);
+
+const storage = getStorage();
 
 const auth = getAuth(app);
 // connectAuthEmulator(auth, "http://localhost:9099");
@@ -187,6 +190,7 @@ const pizza_lib = collection(db, "pizzalib");
 export async function print_pizzas() {
     let dungeon_html_obj = document.getElementById("pizza_dungeon");
     const pizza_docs = await getDocs(pizza_lib); 
+
     dungeon_html_obj.innerHTML = "";
     pizza_docs.forEach((doc) => {
         let ing_txt = String(doc.data().ingredients).replaceAll(",", " • ");
@@ -194,7 +198,7 @@ export async function print_pizzas() {
         dungeon_html_obj.innerHTML += `
             <div class="pizza_cont" id="${doc.id}">
                 <div class="pizza_img">
-                    <img src="assets/placeholder.webp" alt=""/>
+                    <img id="${doc.id}_img" src="assets/placeholder.webp" alt=""/>
 
                     <div class="settings_cont">
                         <div>
@@ -239,7 +243,22 @@ export async function print_pizzas() {
                 </div>
             `;
         }
+
+        // SHOW IMAGE
+        const img_ref = ref(storage, 'pizzalib/'+doc.id+'.jpg');
+        getDownloadURL(img_ref)
+        .then((url) => {
+            const img = document.getElementById(doc.id+"_img");
+            img.setAttribute('src', url);
+        })
+        .catch((error) => {
+            // Handle any errors
+            console.warn(error);
+        });
     });
+
+
+
 }
 
 

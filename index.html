@@ -7,11 +7,63 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-    <img src="./assets/placeholder.webp" alt="placeholder" style="height: 80%; width: 100%;">
-    <button onclick="goTo_dungeon()" class="primary" style="margin-top: -17px;">Placeholder</button>
+
+    <div id="head_img_cont">
+        <div>
+            <img id="head_img" src="./assets/pizzaria_img.webp" alt="">
+            <img id="head_overlay_img" src="assets/pizza_img.png" alt="pizza">
+        </div>
+        <button id="to_pizzas_btn" onclick="goTo_dungeon()" class="primary">Pizza!</button>
+    </div>
 
 </body>
 <script src="./js/global.js"></script>
 <script type="module" src="./js/firebase.js"></script>
+
+<style>
+    #head_img_cont {
+        width: 100vw;
+        height: 80vh;
+        position: relative;
+
+        >div {
+            width: 100%; 
+            height: 100%; 
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #head_img {
+            position: absolute;
+            @media (orientation : landscape) {
+                width: 100%;
+                height: fit-content;
+            }
+            width: fit-content;
+            height: 100%;
+        }
+        #head_overlay_img {
+            position: absolute;
+            max-width: 50%;
+            max-height: 50%;
+            aspect-ratio: 1;
+        }
+
+        #to_pizzas_btn {
+            position: absolute;
+            bottom: 0px;
+            transform: translateY(50%);
+            left: 10%;
+
+            padding: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: x-large;
+            font-weight: bold;
+        }
+    }
+</style>
 </html>
