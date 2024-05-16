@@ -66,6 +66,12 @@ input:not([type=checkbox], [type=radio]) {
     width: inherit;
     position: fixed;
 
+    .top {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%; 
+    }
     .bottom {
         display: flex;
         flex-direction: column;
@@ -102,6 +108,15 @@ input:not([type=checkbox], [type=radio]) {
     }
 }
 
+#logo {
+    margin-top: 10px;
+    width: 75%;
+    aspect-ratio: 1;
+
+    img {
+        width: 100%;
+    }
+}
 
 #logout_btn {
     display: none;
