@@ -203,12 +203,12 @@ export async function print_pizzas() {
                     <div class="settings_cont">
                         <div>
                             <h5 class="settings_title">Size</h5>
-                            <input type="radio" name="${doc.id}_size" id="${doc.id}_L" value="L">
-                            <label for="${doc.id}_L">L</label>
-                            <input type="radio" name="${doc.id}_size" id="${doc.id}_M" value="M" checked>
-                            <label for="${doc.id}_M">M</label>
                             <input type="radio" name="${doc.id}_size" id="${doc.id}_S" value="S">
                             <label for="${doc.id}_S">S</label>
+                            <input type="radio" name="${doc.id}_size" id="${doc.id}_M" value="M" checked>
+                            <label for="${doc.id}_M">M</label>
+                            <input type="radio" name="${doc.id}_size" id="${doc.id}_L" value="L">
+                            <label for="${doc.id}_L">L</label>
                         </div>
                         <div>
                             <h5 class="settings_title">Toppings</h5>
@@ -245,15 +245,21 @@ export async function print_pizzas() {
         }
 
         // SHOW IMAGE
-        const img_ref = ref(storage, 'pizzalib/'+doc.id+'.jpg');
-        getDownloadURL(img_ref)
+        getDownloadURL(ref(storage, 'pizzalib/'+doc.id+'.png'))
         .then((url) => {
             const img = document.getElementById(doc.id+"_img");
             img.setAttribute('src', url);
         })
         .catch((error) => {
-            // Handle any errors
-            console.warn(error);
+            // try with .jpg too
+            getDownloadURL(ref(storage, 'pizzalib/'+doc.id+'.jpg'))
+            .then((url) => {
+                const img = document.getElementById(doc.id+"_img");
+                img.setAttribute('src', url);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
         });
     });
 
